@@ -1,0 +1,29 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mongodb"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  name    String?
+  responses   Response[]
+}
+
+model Response {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime   @default(now())
+  name      String
+  email     String
+  address   String
+  age       String
+  author     User       @relation(fields: [authorEmail], references: [email])
+  authorEmail   String   
+}
+
